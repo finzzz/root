@@ -127,6 +127,10 @@ function bwssh_helper
   bw get item "$BW_CREDS" --organizationid "$BW_ORG_ID" | jq -r --arg item "SSH_$argv[1]" '.fields[] | select(.name == $item).value' | base64 -d | ssh-add -
 end
 
+function bwsshconf_helper
+  bw get item "$BW_SSH_CONF" --organizationid "$BW_ORG_ID" | jq -r '.notes' > $HOME/.ssh/config
+end
+
 function bwsshpass_helper
   bw get item "$BW_SSH_PASS" --organizationid "$BW_ORG_ID" | jq -r --arg item "$argv[1]" '.fields[] | select(.name == $item).value'
 end
@@ -135,11 +139,13 @@ export BW_ORG_ID="68fbd0bd-63d2-4d49-9bca-b0410017988b"
 export BW_CREDS="464c8016-c65f-45ba-b597-b045004c21f3"
 export BW_AWS_CONF="2b432053-30f2-4263-a135-b05800bf311c"
 export BW_AWS_CREDS="9e55c8bc-2754-4239-a4b9-b05800c3650d"
+export BW_SSH_CONF="4c6bba6f-78ce-456b-a658-b059001ed0f3"
 export BW_SSH_PASS="eb7938e6-8ff3-4750-90ae-b05800c797f0"
 
 alias bwa='bwaws_helper'      # Sync aws config and creds. Example: bwa
 alias bwe='bwenv_helper'      # Example: bwe GITHUB_TOKEN
 alias bws='bwssh_helper'      # Example: bws github
+alias bwsc='bwsshconf_helper' # Sync ssh config. Example: bwsc
 alias bwsp='bwsshpass_helper' # Example: bwsp github
 alias bwu='export BW_SESSION="$(bw unlock --raw)"'
 
