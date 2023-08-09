@@ -1,0 +1,80 @@
+format = """
+$username\
+$hostname\
+$kubernetes\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$terraform\
+$vagrant\
+$zig\
+$buf\
+$aws\
+$gcloud\
+$azure\
+$line_break\
+$shell\
+$character"""
+
+[username]
+format = " [╭─$user]($style)@"
+show_always = true
+style_root = "bold #bb9af7"
+style_user = "bold #bb9af7"
+
+[hostname]
+format = "[$hostname]($style) in "
+ssh_only = false
+ssh_symbol = '󰢹 '
+style = "bold #7aa2f7"
+trim_at = "-"
+
+[directory]
+style = "bold #7aa2f7"
+truncate_to_repo = true
+truncation_length = 0
+truncation_symbol = "repo: "
+
+[git_status]
+ahead = "⇡${count}"
+behind = "⇣${count}"
+deleted = "x"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+style = "bold #c0caf5"
+
+[character]
+error_symbol = " [╰─×](bold #bb9af7)"
+success_symbol = " [╰─λ](bold #bb9af7)"
+
+[status]
+disabled = true
+format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]]($style)'
+map_symbol = true
+pipestatus = true
+symbol = "🔴"
+
+[aws]
+force_display = true
+symbol = '󰸏 '
+style = "bold #ff9e64"
+
+[aws.region_aliases]
+ap-northeast-1 = 'apne1'
+ap-northeast-3 = 'apne3'
+
+[git_branch]
+symbol = " "
+style = "bold #545c7e"
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[kubernetes]
+disabled = false
+symbol = "󰠳 "
