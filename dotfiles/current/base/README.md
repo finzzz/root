@@ -16,6 +16,12 @@ export PATH=$PATH:/opt/homebrew/bin # mac
 sudo chsh -s $(which fish) $USER
 ```
 
+### fzf.fish
+
+```bash
+git clone https://github.com/PatrickF1/fzf.fish $HOME/.config
+```
+
 ### nvim
 
 ```bash
