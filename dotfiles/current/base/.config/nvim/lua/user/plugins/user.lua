@@ -108,6 +108,11 @@ return {
         hide_inactive_statusline = false,
         dim_inactive = false,
         lualine_bold = false,
+        on_highlights = function(hl, c)
+          hl.WinSeparator = {
+            fg = c.dark3,
+          }
+        end
       }
     end,
   },
