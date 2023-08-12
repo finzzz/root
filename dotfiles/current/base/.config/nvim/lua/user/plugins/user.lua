@@ -2,7 +2,7 @@ return {
   { "godlygeek/tabular", event = "User AstroFile" },
   { "mzlogin/vim-markdown-toc", event = "User AstroFile" },
   { "machakann/vim-sandwich", event = "VeryLazy" },
-  { "hashivim/vim-terraform", event = "User AstroFile", cmd = { "TerraformFmt" }, lazy = false },
+  { "hashivim/vim-terraform", event = "User AstroFile" },
   {
     "stevearc/oil.nvim",
     opts = {
