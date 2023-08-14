@@ -7,10 +7,10 @@ brew bundle install --file=Brewfile-cli
 brew bundle install --file=Brewfile-gui
 
 export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin # linux
-export PATH=$PATH:/opt/homebrew/bin # mac
+export PATH=$PATH:/opt/homebrew/bin              # mac
 ```
 
-### fish shell setup
+### fish shell
 
 ```bash
 sudo chsh -s $(which fish) $USER                                       # set default shell
