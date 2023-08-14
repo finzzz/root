@@ -19,7 +19,7 @@ sudo chsh -s $(which fish) $USER
 ### fzf.fish
 
 ```bash
-git clone https://github.com/PatrickF1/fzf.fish $HOME/.config
+git clone https://github.com/PatrickF1/fzf.fish $HOME/.config/fzf.fish
 ```
 
 ### nvim
@@ -40,6 +40,7 @@ end
 ### others
 
 ```bash
+touch $HOME/.fish_custom
 ln -s $(readlink -f .fish_profile) $HOME/
 ln -s $(readlink -f .gitconfig) $HOME/
 ln -s $(readlink -f .tmux.conf) $HOME/
