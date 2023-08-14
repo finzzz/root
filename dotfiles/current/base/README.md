@@ -10,16 +10,13 @@ export PATH=$PATH:/home/linuxbrew/.linuxbrew/bin # linux
 export PATH=$PATH:/opt/homebrew/bin # mac
 ```
 
-### set default shell
+### fish shell setup
 
 ```bash
-sudo chsh -s $(which fish) $USER
-```
-
-### fzf.fish
-
-```bash
-git clone https://github.com/PatrickF1/fzf.fish $HOME/.config/fzf.fish
+sudo chsh -s $(which fish) $USER                                       # set default shell
+git clone https://github.com/PatrickF1/fzf.fish $HOME/.config/fzf.fish # clone fzf.fish
+touch $HOME/.fish_custom                                               # custom fish settings
+ln -s $(readlink -f .fish_profile) $HOME/
 ```
 
 ### nvim
@@ -40,8 +37,6 @@ end
 ### others
 
 ```bash
-touch $HOME/.fish_custom
-ln -s $(readlink -f .fish_profile) $HOME/
 ln -s $(readlink -f .gitconfig) $HOME/
 ln -s $(readlink -f .tmux.conf) $HOME/
 ln -s $(readlink -f starship.toml) $HOME/
