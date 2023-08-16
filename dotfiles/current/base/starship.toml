@@ -51,10 +51,6 @@ success_symbol = " [╰─λ](bold #bb9af7)"
 
 [status]
 disabled = true
-format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]]($style)'
-map_symbol = true
-pipestatus = true
-symbol = "🔴"
 
 [aws]
 force_display = true
