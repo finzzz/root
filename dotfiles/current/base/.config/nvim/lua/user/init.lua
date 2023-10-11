@@ -50,11 +50,7 @@ return {
         vim.opt_local.sw = 2
       end
     })
-    vim.api.nvim_create_autocmd(
-      {
-        "BufNewFile",
-        "BufRead",
-      },
+    vim.api.nvim_create_autocmd("BufWinEnter",
       {
         pattern = {
           "*.hcl",
@@ -63,21 +59,13 @@ return {
           ".terraformrc",
           "terraform.rc"
         },
-        callback = function()
-          vim.api.nvim_command("setfiletype terraform")
-        end
+        command = "set ft=terraform"
       }
     )
-    vim.api.nvim_create_autocmd(
-      {
-        "BufNewFile",
-        "BufRead",
-      },
+    vim.api.nvim_create_autocmd("BufWinEnter",
       {
         pattern = "*.tfstate",
-        callback = function()
-          vim.api.nvim_command("setfiletype json")
-        end
+        command = "set ft=json"
       }
     )
   end
