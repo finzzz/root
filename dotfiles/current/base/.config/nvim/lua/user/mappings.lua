@@ -66,6 +66,6 @@ return {
     ["<leader>:"]        = { "<cmd>Tab/:<cr>", desc = "Tabularize :" },
     ["<leader><bslash>"] = { "<cmd>Tab/<bar><cr>", desc = "Tabularize |" },
     ["<leader>="]        = { "<cmd>Tab/=<cr>", desc = "Tabularize =" },
-    ["cn"]               = {[[g:mc . "``cgn"]], expr = true }
+    ["cn"]               = { [[g:mc . "``cgn"]], expr = true }
   },
 }
