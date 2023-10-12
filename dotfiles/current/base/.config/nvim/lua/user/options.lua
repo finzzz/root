@@ -24,10 +24,11 @@ return {
     diagnostics_mode         = 3, -- set the visibility of diagnostics in the UI (0 = off, 1 = only show in status line, 2 = virtual text off, 3 = all on)
     icons_enabled            = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
     mapleader                = " ", -- sets vim.g.mapleader
+    mc                       = vim.api.nvim_replace_termcodes([[y/\V<C-r>=escape(@", '/')<CR><CR>]], true, true, true)
     terraform_align          = 1, -- Allow vim-terraform to align settings automatically with Tabularize.
     terraform_fmt_on_save    = 1, -- Allow vim-terraform to automatically format *.tf and *.tfvars files with terraform fmt
     ui_notifications_enabled = true, -- disable notifications when toggling UI elements
-    vmt_list_item_char       = "-" -- Vim markdown TOC: list item marker
+    vmt_list_item_char       = "-", -- Vim markdown TOC: list item marker
   },
 }
 

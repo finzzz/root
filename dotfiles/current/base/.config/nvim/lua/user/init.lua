@@ -43,7 +43,6 @@ return {
       command = "if mode() != 'c' | checktime | endif",
       pattern = { "*" },
     })
-    --
     vim.api.nvim_create_autocmd("FileType", {
       pattern = "markdown",
       callback = function()

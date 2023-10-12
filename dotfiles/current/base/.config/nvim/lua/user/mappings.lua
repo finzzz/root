@@ -4,6 +4,7 @@ end
 
 return {
   n = {
+    ["cn"]         = { "*``cgn" }, -- https://www.kevinli.co/posts/2017-01-19-multiple-cursors-in-500-bytes-of-vimscript/
     ["cr"]         = { "<cmd>GitConflictRefresh<cr>", desc = "Git conflict: Refresh" },
     ["g"]          = { "<cmd>HopWord<cr>" },
     ["s"]          = false,
@@ -62,8 +63,9 @@ return {
     ["<leader>Y"]  = { "<cmd>Telescope neoclip default extra=star,plus<cr>" , desc = "Yank History" },
   },
   x = {
+    ["<leader>:"]        = { "<cmd>Tab/:<cr>", desc = "Tabularize :" },
     ["<leader><bslash>"] = { "<cmd>Tab/<bar><cr>", desc = "Tabularize |" },
     ["<leader>="]        = { "<cmd>Tab/=<cr>", desc = "Tabularize =" },
-    ["<leader>:"]        = { "<cmd>Tab/:<cr>", desc = "Tabularize :" },
+    ["cn"]               = {[[g:mc . "``cgn"]], expr = true }
   },
 }
