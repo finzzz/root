@@ -44,7 +44,8 @@ return {
     cmd = {
       "HopLineStart",
       "HopPattern",
-      "HopWord"
+      "HopWordAC",
+      "HopWordBC",
     }
   },
   {

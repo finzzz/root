@@ -4,10 +4,18 @@ end
 
 return {
   n = {
+    ["a"]          = { "0" },
+    ["A"]          = { "$" },
     ["cn"]         = { "*``cgn" }, -- https://www.kevinli.co/posts/2017-01-19-multiple-cursors-in-500-bytes-of-vimscript/
     ["cr"]         = { "<cmd>GitConflictRefresh<cr>", desc = "Git conflict: Refresh" },
-    ["g"]          = { "<cmd>HopWord<cr>" },
+    ["E"]          = { "ge" },
+    ["n"]          = { "<cmd>HopWordAC<cr>" },
+    ["N"]          = { "<cmd>HopWordBC<cr>" },
     ["s"]          = false,
+    ["W"]          = { "b" },
+    ["<C-c>"]      = { "<cmd>startinsert<cr>" },
+    ["<Tab>"]      = { "<cmd>bn<cr>" },
+    ["<S-Tab>"]    = { "<cmd>bN<cr>" },
     ["<leader>h"]  = false,
     ["<leader>q"]  = false,
     ["<leader>o"]  = { "<cmd>Oil<cr>", desc = "Oil file manager" },
