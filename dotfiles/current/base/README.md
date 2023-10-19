@@ -13,8 +13,11 @@ brew bundle install --file=Brewfile-gui
 ### nvim
 
 ```bash
-git clone --depth 1 https://github.com/AstroNvim/AstroNvim $HOME/.config/nvim
-ln -s $(readlink -f .config/nvim/lua/user) $HOME/.config/nvim/lua/user
+ln -s $(readlink -f .config/nvim/init.lua) $HOME/.config/nvim/
+
+# Setup in nvim
+# :TSInstall all
+# :TSUpdate
 ```
 
 ### .config

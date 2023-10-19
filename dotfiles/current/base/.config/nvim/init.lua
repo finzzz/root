@@ -28,7 +28,6 @@ vim.opt.listchars      = {             -- whitespace chars
 
 vim.cmd("set splitbelow") -- default split window below
 vim.cmd("set splitright") -- default split window right
--- vim.cmd("set shm=a")
 
 -- Package manager
 -- https://github.com/folke/lazy.nvim
@@ -55,9 +54,9 @@ require('lazy').setup(
   {
     {
       "folke/tokyonight.nvim",
+      tag = "v2.9.0",
       lazy = false,
       priority = 1000,
-      opts = {},
       config = function()
         require("tokyonight").setup({
           style = "night",
@@ -84,6 +83,7 @@ require('lazy').setup(
     },
     {
       "godlygeek/tabular",
+      tag = "1.0.0",
       cmd = "Tab",
       keys = {
         { "<leader>:", ":'<,'>Tab/:<cr>", mode = "x" },
@@ -93,10 +93,12 @@ require('lazy').setup(
     },
     {
       "folke/which-key.nvim",
+      tag = "v1.6.0",
       event = "VeryLazy",
     },
     {
       'windwp/nvim-autopairs',
+      commit = "f6c71641f6f183427a651c0ce4ba3fb89404fa9e",
       event = "InsertEnter",
       opts = {
         check_ts = true,
@@ -116,6 +118,7 @@ require('lazy').setup(
     },
     {
       "luukvbaal/statuscol.nvim",
+      commit = "98d02fc90ebd7c4674ec935074d1d09443d49318",
       config = function()
         local builtin = require("statuscol.builtin")
         require("statuscol").setup({
@@ -131,9 +134,10 @@ require('lazy').setup(
     },
     {
       "kevinhwang91/nvim-ufo",
+      tag = "v1.3.0",
       event = "BufEnter",
       dependencies = { 
-        "kevinhwang91/promise-async",
+        { "kevinhwang91/promise-async", tag = "v1.0.0" },
       },
       config = function()
         vim.o.foldcolumn = "1" -- show sidebar fold status
@@ -153,6 +157,7 @@ require('lazy').setup(
     },
     {
       'numToStr/Comment.nvim',
+      tag = "v0.8.0",
       opts = {
         mappings = {
           basic = false,
@@ -166,12 +171,12 @@ require('lazy').setup(
     },
     {
       "nvim-neo-tree/neo-tree.nvim",
-      branch = "v3.x",
+      commit = "63ebe879ad4798b66d29c0b2c8d04942389d438e", -- 3.8
       lazy = false,
       dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-tree/nvim-web-devicons",
-        "MunifTanjim/nui.nvim",
+        { "nvim-lua/plenary.nvim", tag = "v0.1.4" },
+        { "nvim-tree/nvim-web-devicons", commit = "3af745113ea537f58c4b1573b64a429fefad9e07" },
+        { "MunifTanjim/nui.nvim", tag = "0.2.0" },
       },
       opts = {
         auto_clean_after_session_restore = true,
@@ -211,6 +216,7 @@ require('lazy').setup(
     },
     {
       "lewis6991/gitsigns.nvim",
+      tag = "v0.6",
       enabled = vim.fn.executable "git" == 1,
       event = "VeryLazy",
       opts = {
@@ -231,6 +237,7 @@ require('lazy').setup(
     {
       {
         'smoka7/hop.nvim',
+        tag = "v2.3.2",
         config = function()
           require'hop'.setup { keys = 'plmoknijb8uhv7ygc6tfx5rdz4es3wa2q' }
         end,
@@ -245,6 +252,7 @@ require('lazy').setup(
     },
     {
       'romgrk/barbar.nvim',
+      tag = "v1.7.0",
       init = function() vim.g.barbar_auto_setup = false end,
       opts = {
         clickable = true,
@@ -263,21 +271,22 @@ require('lazy').setup(
     },
     {
       "williamboman/mason.nvim", -- Package manager
+      tag = "v1.8.1",
       event = "VeryLazy",
       dependencies = {
         -- LSP related
-        "williamboman/mason-lspconfig.nvim",
-        "neovim/nvim-lspconfig",
+        { "williamboman/mason-lspconfig.nvim", tag = "v1.18.0" },
+        { "neovim/nvim-lspconfig", tag = "v0.1.6" },
         -- Autocompletion
-        "hrsh7th/nvim-cmp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-path",
+        { "hrsh7th/nvim-cmp", tag = "v0.0.1" },
+        { "hrsh7th/cmp-buffer", commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
+        { "hrsh7th/cmp-cmdline", commit = "8ee981b4a91f536f52add291594e89fb6645e451" },
+        { "hrsh7th/cmp-nvim-lsp", commit = "44b16d11215dce86f253ce0c30949813c0a90765" },
+        { "hrsh7th/cmp-path", commit = "91ff86cd9c29299a64f968ebb45846c485725f23" },
         -- Snippets
-        "L3MON4D3/LuaSnip",
-        "saadparwaiz1/cmp_luasnip",
-        "rafamadriz/friendly-snippets",
+        { "L3MON4D3/LuaSnip", tag = "v2.0.0" },
+        { "saadparwaiz1/cmp_luasnip", commit = "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
+        { "rafamadriz/friendly-snippets", commit = "43727c2ff84240e55d4069ec3e6158d74cb534b6" },
       },
       config = function()
         local cmp = require('cmp')
@@ -348,19 +357,17 @@ require('lazy').setup(
     },
     {
       "dense-analysis/ale", -- linter
+      tag = "v3.3.0",
       event = "VeryLazy"
     },
     {
       'nvim-treesitter/nvim-treesitter', -- syntax highlighter
+      tag = "v0.9.1",
       event = "VeryLazy",
       config = function()
         require'nvim-treesitter.configs'.setup {
-          highlight = {
-            enable = true
-          },
-          indent = {
-            enable = true
-          }
+          highlight = { enable = true },
+          indent = { enable = true },
         }
       end,
       keys = {
@@ -371,10 +378,11 @@ require('lazy').setup(
     },
     {
       'nvim-lualine/lualine.nvim',
+      commit = "7533b0ead663d80452210c0c089e5105089697e5",
       lazy = false,
       config = function()
         local function session_name()
-          session = require('possession.session').session_name or 'Untitled'
+          local session = require('possession.session').session_name or 'Untitled'
           return "󱂬  "..session
         end
         require('lualine').setup({
@@ -415,6 +423,7 @@ require('lazy').setup(
     },
     {
       'nvim-telescope/telescope.nvim',
+      tag = "0.1.4",
       dependencies = { 'nvim-lua/plenary.nvim' },
       keys = {
         { "<leader>f/", function() require("telescope.builtin").current_buffer_fuzzy_find() end, desc = "Words in current buffer", mode = "n" },
@@ -441,6 +450,7 @@ require('lazy').setup(
     },
     {
       'norcalli/nvim-colorizer.lua',
+      commit = "36c610a9717cc9ec426a07c8e6bf3b3abcb139d6",
       event = "VeryLazy",
       config = function()
         require 'colorizer'.setup()
@@ -448,6 +458,7 @@ require('lazy').setup(
     },
     {
       "akinsho/toggleterm.nvim",
+      tag = "v2.8.0",
       cmd = "ToggleTerm",
       config = function()
         require("toggleterm").setup()
@@ -460,6 +471,7 @@ require('lazy').setup(
     },
     {
       "stevearc/oil.nvim",
+      tag = "v2.2.0",
       opts = {
         default_file_explorer = false,
         use_default_keymaps = false,
@@ -482,6 +494,7 @@ require('lazy').setup(
     },
     {
       "kylechui/nvim-surround",
+      tag = "v2.1.1",
       event = "VeryLazy",
       config = function()
         vim.keymap.set('n', 's', '<nop>')
@@ -505,6 +518,7 @@ require('lazy').setup(
     },
     {
       'Wansmer/treesj',
+      commit = "070e6761d0b11a55446d988a69908f7a0928dbab",
       dependencies = { 'nvim-treesitter/nvim-treesitter' },
       config = function()
         require('treesj').setup({
@@ -518,6 +532,7 @@ require('lazy').setup(
     },
     {
       "karb94/neoscroll.nvim",
+      commit = "4bc0212e9f2a7bc7fe7a6bceb15b33e39f0f41fb",
       event = "VeryLazy",
       config = function()
         require('neoscroll').setup({
@@ -542,6 +557,7 @@ require('lazy').setup(
     },
     {
       "hashivim/vim-terraform",
+      commit = "d37ae7e7828aa167877e338dea5d4e1653ed3eb1",
       ft = "terraform",
       config = function()
         vim.g.terraform_align       = 1
@@ -550,6 +566,7 @@ require('lazy').setup(
     },
     {
       "lukas-reineke/indent-blankline.nvim",
+      tag = "v3.3.2",
       event = "VeryLazy",
       config = function()
         require("ibl").setup()
@@ -557,6 +574,7 @@ require('lazy').setup(
     },
     {
       "folke/trouble.nvim",
+      tag = "v2.10.0",
       dependencies = { "nvim-tree/nvim-web-devicons" },
       config = function()
         require("trouble").setup()
@@ -569,6 +587,7 @@ require('lazy').setup(
     },
     {
       'nyngwang/NeoZoom.lua',
+      commit = "1289b900bd478fd135dcc0faf4a43b3cf7524097",
       config = function()
         require('neo-zoom').setup{
           winopts = {
@@ -586,6 +605,7 @@ require('lazy').setup(
     },
     {
       "folke/todo-comments.nvim",
+      tag = "v1.1.0",
       dependencies = { "nvim-lua/plenary.nvim" },
       event = "VeryLazy",
       config = function()
@@ -597,6 +617,17 @@ require('lazy').setup(
             NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
             TEST = { icon = "󰙨 ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
           },
+          search = {
+            command = "rg",
+            args = {
+              "--color=never",
+              "--no-heading",
+              "--with-filename",
+              "--line-number",
+              "--column",
+              "--hidden",
+            }
+          }
         }
         vim.keymap.set("n", "]t", function() require("todo-comments").jump_next() end, { desc = "Next todo comment" })
         vim.keymap.set("n", "[t", function() require("todo-comments").jump_prev() end, { desc = "Previous todo comment" })
@@ -609,6 +640,7 @@ require('lazy').setup(
     },
     {
       'mzlogin/vim-markdown-toc',
+      tag = "v1.4.0",
       ft = "markdown",
       config = function()
         vim.g.vmt_list_item_char = "-"
@@ -620,6 +652,7 @@ require('lazy').setup(
     },
     {
       'jedrzejboczar/possession.nvim',
+      version = "2dbf7aee020a330827eedc15dc7a32f0a8da8eee",
       dependencies = { 'nvim-lua/plenary.nvim' },
       config = function()
         require('possession').setup {}
@@ -635,6 +668,7 @@ require('lazy').setup(
     },
     {
       "sindrets/diffview.nvim",
+      commit = "d38c1b5266850f77f75e006bcc26213684e1e141",
       dependencies = { "nvim-lua/plenary.nvim" },
       config = function()
         local actions = require("diffview.actions")
@@ -667,6 +701,7 @@ require('lazy').setup(
     },
     {
       "goolord/alpha-nvim",
+      commit = "234822140b265ec4ba3203e3e0be0e0bb826dff5",
       lazy = false,
       config = function()
         require'alpha'.setup(require'alpha.themes.startify'.config)
