@@ -634,8 +634,9 @@ require('lazy').setup(
         require('telescope').load_extension('todo-comments')
       end,
       keys = {
-        { "<leader>ft", ":TodoTelescope<cr>", desc = "Find todo comment", mode = "n" },
-        { "<leader>Tc", ":TodoLocList<cr>", desc = "todo comment", mode = "n" },
+        { "<leader>ft", "<cmd>TodoTelescope<cr>", desc = "All todo comments", mode = "n" },
+        { "<leader>TC", "<cmd>TodoLocList<cr>", desc = "All todo comments", mode = "n" },
+        { "<leader>Tc", "<cmd>exe ':TodoQuickFix cwd=' .. fnameescape(expand('%:p'))<cr>", desc = "Todo comments", mode = "n" },
       }
     },
     {
@@ -746,6 +747,9 @@ require("which-key").register(
         w = { "<cmd> silent !tmux new-window -c %:p:h<cr>", "Tmux new window" },
       },
       T = { name = "Trouble" },
+      w = { "<cmd> silent w<cr>", "Save" },
+      x = { "<cmd> silent wq<cr>", "Save & Quit" },
+      q = { "<cmd> silent q<cr>", "Quit" }
     }
   }
 )
