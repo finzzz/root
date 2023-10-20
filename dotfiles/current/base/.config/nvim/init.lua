@@ -301,12 +301,12 @@ require('lazy').setup(
             ['<C-e>'] = cmp.mapping.abort(),
             ['<CR>'] = cmp.mapping.confirm({ select = true }),
           }),
-          sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
-            { name = 'luasnip' },
-          }, {
+          sources = cmp.config.sources{
             { name = 'buffer' },
-          })
+            { name = 'luasnip' },
+            { name = 'nvim_lsp' },
+            { name = 'path' }
+          }
         })
 
         cmp.setup.filetype('gitcommit', {
@@ -757,6 +757,10 @@ require("which-key").register(
 -- Non plugin keymapping
 vim.keymap.set('n', '<Tab>', '<cmd>BufferNext<cr>')
 vim.keymap.set('n', '<C-c>', 'i')
+vim.keymap.set('n', 'i', '<up>')
+vim.keymap.set('n', 'j', '<left>')
+vim.keymap.set('n', 'k', '<down>')
+vim.keymap.set('n', 'l', '<right>')
 
 -- https://www.kevinli.co/posts/2017-01-19-multiple-cursors-in-500-bytes-of-vimscript/
 vim.keymap.set('n', 'cn', '*``cgn')
