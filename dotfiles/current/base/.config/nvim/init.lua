@@ -187,10 +187,16 @@ require('lazy').setup(
           content_layout = "center",
         },
         default_component_configs = {
+          container = {
+            enable_character_fade = true
+          },
           git_status = {
             symbols = {
               modified  = ""
             }
+          },
+          file_size = {
+            required_width = 200,
           }
         },
         filesystem = {
@@ -385,6 +391,15 @@ require('lazy').setup(
           local session = require('possession.session').session_name or 'Untitled'
           return "󱂬  "..session
         end
+
+        local function show_macro_recording()
+          local recording_register = vim.fn.reg_recording()
+          if recording_register == "" then
+            return ""
+          else
+            return "Recording @" .. recording_register
+          end
+        end
         require('lualine').setup({
           options = {
             globalstatus = true,
@@ -395,6 +410,10 @@ require('lazy').setup(
             lualine_a = {'mode'},
             lualine_b = { session_name, 'branch'},
             lualine_c = {
+              {
+                "macro-recording",
+                fmt = show_macro_recording,
+              },
               'diff',
               'diagnostics',
               {
@@ -408,6 +427,9 @@ require('lazy').setup(
               }
             },
             lualine_x = {
+              'searchcount'
+            },
+            lualine_y = {
               'encoding',
               {
                 'filetype',
@@ -415,9 +437,33 @@ require('lazy').setup(
               },
               'filesize'
             },
-            lualine_y = {'progress'},
-            lualine_z = {}
+            lualine_z = {'progress'},
           },
+        })
+
+        -- https://www.reddit.com/r/neovim/comments/xy0tu1/cmdheight0_recording_macros_message/
+        lualine = require('lualine')
+        vim.api.nvim_create_autocmd("RecordingEnter", {
+          callback = function()
+            lualine.refresh({
+              place = { "statusline" },
+            })
+          end,
+        })
+
+        vim.api.nvim_create_autocmd("RecordingLeave", {
+          callback = function()
+            local timer = vim.loop.new_timer()
+            timer:start(
+              50,
+              0,
+              vim.schedule_wrap(function()
+                lualine.refresh({
+                  place = { "statusline" },
+                })
+              end)
+            )
+          end,
         })
       end
     },
@@ -757,10 +803,15 @@ require("which-key").register(
 -- Non plugin keymapping
 vim.keymap.set('n', '<Tab>', '<cmd>BufferNext<cr>')
 vim.keymap.set('n', '<C-c>', 'i')
-vim.keymap.set('n', 'i', '<up>')
-vim.keymap.set('n', 'j', '<left>')
-vim.keymap.set('n', 'k', '<down>')
-vim.keymap.set('n', 'l', '<right>')
+vim.keymap.set('n', 'Q', '@@')
+vim.keymap.set({ 'n', 'x' }, 'i', '<up>')
+vim.keymap.set({ 'n', 'x' }, 'j', '<left>')
+vim.keymap.set({ 'n', 'x' }, 'k', '<down>')
+vim.keymap.set({ 'n', 'x' }, 'l', '<right>')
+vim.keymap.set({ 'n', 'x' }, '<C-i>', '<C-w><up>')
+vim.keymap.set({ 'n', 'x' }, '<C-j>', '<C-w><left>')
+vim.keymap.set({ 'n', 'x' }, '<C-k>', '<C-w><down>')
+vim.keymap.set({ 'n', 'x' }, '<C-l>', '<C-w><right>')
 
 -- https://www.kevinli.co/posts/2017-01-19-multiple-cursors-in-500-bytes-of-vimscript/
 vim.keymap.set('n', 'cn', '*``cgn')
@@ -800,3 +851,12 @@ vim.api.nvim_create_autocmd("BufWinEnter",
     command = "set ft=json"
   }
 )
+
+vim.api.nvim_create_autocmd('TextYankPost', {
+  group = vim.api.nvim_create_augroup('highlight_yank', {}),
+  desc = 'Hightlight selection on yank',
+  pattern = '*',
+  callback = function()
+    vim.highlight.on_yank { higroup = 'IncSearch', timeout = 200 }
+  end,
+})
