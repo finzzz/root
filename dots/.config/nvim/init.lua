@@ -210,6 +210,12 @@ require('lazy').setup(
                 config = {
                   show_path = "absolute"
                 }
+              },
+              ["m"] = {
+                "move",
+                config = {
+                  show_path = "absolute"
+                }
               }
             }
           }
@@ -804,6 +810,11 @@ require("which-key").register(
 vim.keymap.set('n', '<Tab>', '<cmd>BufferNext<cr>')
 vim.keymap.set('n', '<C-c>', 'i')
 vim.keymap.set('n', 'Q', '@@')
+vim.keymap.set('n', 'a', 'i')
+vim.keymap.set('n', 'A', 'o')
+vim.keymap.set('x', 'a', 'I')
+vim.keymap.set('x', '[', ':m-2<cr>gv=gv')
+vim.keymap.set('x', ']', ":m'>+<cr>gv=gv")
 vim.keymap.set({ 'n', 'x' }, 'i', '<up>')
 vim.keymap.set({ 'n', 'x' }, 'j', '<left>')
 vim.keymap.set({ 'n', 'x' }, 'k', '<down>')
@@ -812,6 +823,10 @@ vim.keymap.set({ 'n', 'x' }, '<C-i>', '<C-w><up>')
 vim.keymap.set({ 'n', 'x' }, '<C-j>', '<C-w><left>')
 vim.keymap.set({ 'n', 'x' }, '<C-k>', '<C-w><down>')
 vim.keymap.set({ 'n', 'x' }, '<C-l>', '<C-w><right>')
+vim.keymap.set({ 'n', 'x' }, '<C-up>', '<C-w><up>')
+vim.keymap.set({ 'n', 'x' }, '<C-left>', '<C-w><left>')
+vim.keymap.set({ 'n', 'x' }, '<C-down>', '<C-w><down>')
+vim.keymap.set({ 'n', 'x' }, '<C-right>', '<C-w><right>')
 
 -- https://www.kevinli.co/posts/2017-01-19-multiple-cursors-in-500-bytes-of-vimscript/
 vim.keymap.set('n', 'cn', '*``cgn')
