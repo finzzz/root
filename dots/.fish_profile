@@ -1,0 +1,152 @@
+# Hide welcome message
+set fish_greeting
+set VIRTUAL_ENV_DISABLE_PROMPT "1"
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+set -x MANROFFOPT "-c" # set/unset if man page has formatting issue
+
+# Paths
+fish_add_path /home/linuxbrew/.linuxbrew/bin
+fish_add_path /opt/homebrew/bin # mac os
+fish_add_path $HOME/.local/bin
+fish_add_path $HOME/.krew/bin 
+fish_add_path $HOME/go/bin
+fish_add_path $HOME/bin
+
+# Sources
+source $HOME/.config/fzf.fish/completions/fzf_configure_bindings.fish
+for f in $HOME/.config/fzf.fish/functions/*;
+  source $f;
+end
+source $HOME/.config/fzf.fish/conf.d/fzf.fish
+[ -f $HOME/.fish_custom ] && source $HOME/.fish_custom
+
+command -v starship >/dev/null && starship init fish | source
+command -v zoxide >/dev/null && zoxide init fish | source
+command -v kubecm >/dev/null && kubecm c fish | source
+command -v gh >/dev/null && gh completion -s fish | source
+
+# Environment variables
+export EDITOR=nvim
+export STARSHIP_CONFIG=$HOME/starship.toml
+
+# Theme
+fish_config theme choose "TokyoNight Night"
+
+# Aliases
+alias ls='exa -al --color=always --group-directories-first --icons' # preferred listing
+alias la='exa -a --color=always --group-directories-first --icons'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first --icons'  # long format
+alias lt='exa -aT --color=always --group-directories-first --icons' # tree listing
+
+function pick-unstaged-files
+  gs | grep -E "(^ D)|(^MM)|(^ M)|(^\?\?)" | awk '{$1=$1};1' | cut -d" " -f2 | fzf --preview='gd -- {}'
+end
+
+alias ga='git add'
+alias gaf='ga $(pick-unstaged-files)'
+alias gb='git for-each-ref --sort=-authordate --format="%(refname:short)%09%(authordate:relative)%09%(objectname:short)" refs/heads'
+alias gca='git commit --amend'
+alias gcm='git commit -m '
+alias gco='git checkout'
+alias gcof='gco $(gb | fzf --preview "echo {} | cut -f1 | git log -n 8 --color=always" | cut -f 1)'
+alias gcor='gco -- $(pick-unstaged-files)' # discard changes made to an unstaged file
+alias gcot='gco $(gtl)'
+alias gd='git diff --color=always'
+alias gf='git fetch'
+alias gl='git log --graph --decorate --oneline --color=always'
+alias glo='git log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
+alias gp='git push -u origin HEAD'
+alias grb='git rebase'
+alias grba='grb --abort'
+alias grbc='grb --continue'
+alias grbi='grb -i $(gl | cut -d" " -f2- | fzf --ansi | cut -d" " -f1)'
+alias gs='git status -sb'
+alias gstd='git stash drop $(gstl | fzf --ansi | cut -d" " -f1)'
+alias gstl='git stash list --format="%C(yellow)%gd%C(reset) %C(green)(%cr)%C(reset) %s" --color=always'
+alias gstp='git stash pop $(gstl | fzf --ansi | cut -d" " -f1)'
+alias gsts='git stash save'
+alias gsu='git ls-files --others --exclude-standard'
+alias gtl='git tag -l --sort=-v:refname | fzf --preview "git show --color=always {}"'
+alias gta='git tag -a'
+alias gtd='git tag -d $(gtl)'
+alias gup='git fetch && git rebase origin/$(git branch -l master main | sed \'s/^* //\' | tr -d " ")'
+
+alias tf='terraform'
+alias tfa='tf apply'
+alias tfar='tfa -refresh-only'
+alias tfd='tf destroy'
+alias tff='tf fmt'
+alias tfi='tf init'
+alias tfir='tf init -backend=false'
+alias tfl='tflint'
+alias tfp='tf plan'
+alias tfpr='tfp -refresh-only'
+alias tfs='tfswitch'
+alias tfv='tf validate'
+alias tg='terragrunt'
+
+alias ascc='asciinema cat'
+alias ascp='asciinema play'
+alias ascr='asciinema rec'
+alias awsp='export AWS_PROFILE=$(aws configure list-profiles | fzf)'
+alias cat='bat --style header --style snip --style changes --style header'
+alias cd='z'
+alias df='duf'
+alias diff='delta' # git-delta
+alias dig='dog'
+alias du='dust'
+alias fixssh='export SSH_AUTH_SOCK=$(find $(/bin/ls -dt1 /tmp/ssh-* | head -1) -name "agent*" -user $USER)'
+alias grep='grep --color=auto'
+alias ip="ip -color"
+alias k='kubectl'
+alias kc='kubecm'
+alias lg='lazygit'
+alias ping='gping'
+alias port='lsof -Pi'
+alias ps='procs'
+alias psmem='ps auxf | sort -nr -k 4'
+alias ssk='ssh-keygen'
+alias top='btop'
+alias vi='nvim'
+alias watch="watch "
+alias wget='wget -c'
+
+# yt-dlp
+alias ytl='yt-dlp -qF --list-formats' # <url>
+alias ytd='yt-dlp -f' # <format id: 251+271> <url>
+
+# bitwarden
+function bwaws_helper
+  bw get item "$BW_AWS_CONF" --organizationid "$BW_ORG_ID" | jq -r '.notes' > $HOME/.aws/config
+  bw get item "$BW_AWS_CREDS" --organizationid "$BW_ORG_ID" | jq -r '.notes' > $HOME/.aws/credentials
+end
+
+function bwenv_helper
+  export "$argv[1]"=$(bw get item "$BW_CREDS" --organizationid "$BW_ORG_ID" | jq -r --arg item "$argv[1]" '.fields[] | select(.name == $item).value')
+end
+
+function bwssh_helper
+  bw get item "$BW_CREDS" --organizationid "$BW_ORG_ID" | jq -r --arg item "SSH_$argv[1]" '.fields[] | select(.name == $item).value' | base64 -d | ssh-add -
+end
+
+function bwsshconf_helper
+  bw get item "$BW_SSH_CONF" --organizationid "$BW_ORG_ID" | jq -r '.notes' > $HOME/.ssh/config
+end
+
+function bwsshpass_helper
+  bw get item "$BW_SSH_PASS" --organizationid "$BW_ORG_ID" | jq -r --arg item "$argv[1]" '.fields[] | select(.name == $item).value'
+end
+
+export BW_ORG_ID="68fbd0bd-63d2-4d49-9bca-b0410017988b"
+export BW_CREDS="464c8016-c65f-45ba-b597-b045004c21f3"
+export BW_AWS_CONF="2b432053-30f2-4263-a135-b05800bf311c"
+export BW_AWS_CREDS="9e55c8bc-2754-4239-a4b9-b05800c3650d"
+export BW_SSH_CONF="4c6bba6f-78ce-456b-a658-b059001ed0f3"
+export BW_SSH_PASS="eb7938e6-8ff3-4750-90ae-b05800c797f0"
+
+alias bwa='bwaws_helper'                           # Sync aws config and creds. Example: bwa
+alias bwe='bwenv_helper'                           # Example: bwe GITHUB_TOKEN
+alias bws='bwssh_helper'                           # Example: bws github
+alias bwsc='bwsshconf_helper'                      # Sync ssh config. Example: bwsc
+alias bwsp='bwsshpass_helper'                      # Example: bwsp github
+alias bwu='export BW_SESSION="$(bw unlock --raw)"' # Unlock bitwarden
