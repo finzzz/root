@@ -16,6 +16,7 @@ vim.opt.shiftwidth     = 2             -- number of space inserted for indentati
 vim.opt.showbreak      = "↪"           -- show break sign when wrapping long line
 vim.opt.spell          = false         -- spell checking
 vim.opt.tabstop        = 2             -- number of space in a tab
+vim.opt.undofile       = true          -- enable undo after close
 vim.opt.wrap           = true          -- wrapping of lines longer than the width of window
 vim.opt.listchars      = {             -- whitespace chars
    eol        = "$",
