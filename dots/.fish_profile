@@ -153,3 +153,7 @@ alias bws='bwssh_helper'                           # Example: bws github
 alias bwsc='bwsshconf_helper'                      # Sync ssh config. Example: bwsc
 alias bwsp='bwsshpass_helper'                      # Example: bwsp github
 alias bwu='export BW_SESSION="$(bw unlock --raw)"' # Unlock bitwarden
+
+alias gcp='gcloud'
+alias gcpi='gcp init --no-browser --console-only --skip-diagnostics'
+alias gcpl="gcloud auth application-default login --no-launch-browser"
