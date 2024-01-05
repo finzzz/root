@@ -42,6 +42,18 @@ function pick-unstaged-files
   gs | grep -E "(^ D)|(^MM)|(^ M)|(^\?\?)" | awk '{$1=$1};1' | cut -d" " -f2 | fzf --preview='gd -- {}'
 end
 
+function worktree-init
+  set URL $argv[1]
+  set NAME $argv[2]
+  test -z $NAME && set NAME $(echo $URL | awk -F/ '{print $NF}' | sed -e 's/\.git$//')
+  mkdir $NAME
+  cd "$NAME"
+  git clone --bare "$URL" .bare
+  echo "gitdir: ./.bare" > .git
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+  git fetch origin
+end
+
 alias ga='git add'
 alias gaf='ga $(pick-unstaged-files)'
 alias gb='git branch'
@@ -72,14 +84,18 @@ alias gta='git tag -a'
 alias gtd='git tag -d $(gtl)'
 alias gup='git fetch && git rebase origin/$(git branch -l master main | sed \'s/^* //\' | tr -d " ")'
 alias gw='git worktree'
+alias gwi='worktree-init'
 alias gwa='gw add'
 alias gwl='gw list'
 alias gwr='gw remove'
 
 alias tf='terraform'
+alias tg='terragrunt'
 alias tfa='tf apply'
+alias tfay='tfa --auto-approve'
 alias tfar='tfa -refresh-only'
 alias tfd='tf destroy'
+alias tfdy='tfd --auto-approve'
 alias tff='tf fmt'
 alias tfi='tf init'
 alias tfir='tf init -backend=false'
@@ -88,7 +104,6 @@ alias tfp='tf plan'
 alias tfpr='tfp -refresh-only'
 alias tfs='tfswitch'
 alias tfv='tf validate'
-alias tg='terragrunt'
 
 alias ascc='asciinema cat'
 alias ascp='asciinema play'
@@ -156,4 +171,4 @@ alias bwu='export BW_SESSION="$(bw unlock --raw)"' # Unlock bitwarden
 
 alias gcp='gcloud'
 alias gcpi='gcp init --no-browser --console-only --skip-diagnostics'
-alias gcpl="gcloud auth application-default login --no-launch-browser"
+alias gcpl="gcloud auth application-default login --no-launch-browser" # login
