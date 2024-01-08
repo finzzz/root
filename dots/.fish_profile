@@ -20,6 +20,7 @@ end
 source $HOME/.config/fzf.fish/conf.d/fzf.fish
 [ -f $HOME/.fish_custom ] && source $HOME/.fish_custom
 
+# Autocomplete
 command -v starship >/dev/null && starship init fish | source
 command -v zoxide >/dev/null && zoxide init fish | source
 command -v kubecm >/dev/null && kubecm c fish | source
@@ -38,9 +39,46 @@ alias la='exa -a --color=always --group-directories-first --icons'  # all files 
 alias ll='exa -l --color=always --group-directories-first --icons'  # long format
 alias lt='exa -aT --color=always --group-directories-first --icons' # tree listing
 
-function pick-unstaged-files
-  gs | grep -E "(^ D)|(^MM)|(^ M)|(^\?\?)" | awk '{$1=$1};1' | cut -d" " -f2 | fzf --preview='gd -- {}'
-end
+alias git-default-branch="gb -a | grep remotes/origin/HEAD | awk -F' ' '{print $NF}'"
+alias git-pick-unstaged="gs -s -uno | tail -n +2 | cut -c4- | fzf --preview='gd -- {}'"
+
+alias ga='git add'
+alias gaf='git-pick-unstaged | xargs git add'
+
+alias gb='git branch'
+
+alias gca='git commit --amend'
+alias gcm='git commit -m '
+
+alias gco='git checkout'
+alias gcor='git-pick-unstaged | xargs git checkout --' # discard changes made to an unstaged file
+alias gcot='gtl | xargs git checkout' # checkout tag
+
+alias gd='git diff --color=always'
+alias gl='git log --graph --decorate --oneline --color=always | fzf --ansi --preview="gd {2}" | cut -d" " -f2'
+alias glo='git log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
+alias gs='git status -sb'
+alias gsu='git ls-files --others --exclude-standard'
+
+alias gf='git fetch'
+alias gp='git push -u origin HEAD'
+alias gup="gf && git-default-branch | xargs git rebase"
+
+alias grb='git rebase'
+alias grba='grb --abort'
+alias grbc='grb --continue'
+alias grbi='gl | xargs git rebase -i'
+
+alias gst='git stash'
+alias gstd='gitl | xargs git stash drop'
+alias gstl='gst list --format="%C(yellow)%gd%C(reset) %C(green)(%cr)%C(reset) %s" --color=always | fzf --ansi --preview="gst show -p --color=always {1}" | cut -d" " -f1'
+alias gstp='gstl | xargs git stash pop'
+alias gsts='gst save'
+
+alias gt='git tag'
+alias gta='gt -a'
+alias gtd='git-ls-tag | xargs git tag -d'
+alias gtl='gt -l --sort=-v:refname | fzf --preview "git show --color=always {}"'
 
 function worktree-init
   set URL $argv[1]
@@ -54,37 +92,6 @@ function worktree-init
   git fetch origin
 end
 
-alias ga='git add'
-alias gaf='ga $(pick-unstaged-files)'
-alias gb='git branch'
-alias gbd='gb -d'
-alias gca='git commit --amend'
-alias gcm='git commit -m '
-alias gco='git checkout'
-alias gcof='gco $(gb | fzf --preview "echo {} | cut -f1 | git log -n 8 --color=always" | cut -f 1)'
-alias gcor='gco -- $(pick-unstaged-files)' # discard changes made to an unstaged file
-alias gcot='gco $(gtl)'
-alias gd='git diff --color=always'
-alias gf='git fetch'
-alias gl='git log --graph --decorate --oneline --color=always'
-alias glo='git log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
-alias gp='git push -u origin HEAD'
-alias grb='git rebase'
-alias grba='grb --abort'
-alias grbc='grb --continue'
-alias grbi='grb -i $(gl | cut -d" " -f2- | fzf --ansi | cut -d" " -f1)'
-alias gs='git status -sb'
-alias gst='git stash'
-alias gstd='gst drop $(gstl | fzf --ansi | cut -d" " -f1)'
-alias gstl='gst list --format="%C(yellow)%gd%C(reset) %C(green)(%cr)%C(reset) %s" --color=always'
-alias gstp='gst pop $(gstl | fzf --ansi | cut -d" " -f1)'
-alias gsts='gst save'
-alias gsu='git ls-files --others --exclude-standard'
-alias gt='git tag'
-alias gtl='gt -l --sort=-v:refname | fzf --preview "git show --color=always {}"'
-alias gta='gt -a'
-alias gtd='gt -d $(gtl)'
-alias gup="gf && grb $(gb -a | grep remotes/origin/HEAD | awk -F' ' '{print $NF}')"
 alias gw='git worktree'
 alias gwa='gw add'
 alias gwi='worktree-init'
@@ -109,34 +116,41 @@ alias tfpr='tfp -refresh-only'
 alias tfs='tfswitch'
 alias tfv='tf validate'
 
-alias ascc='asciinema cat'
-alias ascp='asciinema play'
-alias ascr='asciinema rec'
-alias awsp='export AWS_PROFILE=$(aws configure list-profiles | fzf)'
+alias asc='asciinema'
 alias cat='bat --style header --style snip --style changes --style header'
 alias cd='z'
+alias cpr='nvim +%y +"echo delete(@%)" +qa! - >/dev/null'
 alias df='duf'
 alias diff='delta' # git-delta
 alias du='dust'
-alias fixssh='export SSH_AUTH_SOCK=$(find $(/bin/ls -dt1 /tmp/ssh-* | head -1) -name "agent*" -user $USER)'
 alias grep='grep --color=auto'
 alias ip="ip -color"
-alias k='kubectl'
-alias kc='kubecm'
-alias ko='kops'
 alias lg='lazygit'
 alias port='lsof -Pi'
 alias ps='procs'
 alias psmem='ps auxf | sort -nr -k 4'
-alias ssk='ssh-keygen'
 alias top='btop'
 alias vi='nvim'
 alias watch="watch "
 alias wget='wget -c'
 
+alias k='kubectl'
+alias kc='kubecm'
+alias ko='kops'
+
+function ssh-agent-sock-file
+  export SSH_AUTH_SOCK=$(/bin/ls -dt1 /tmp/ssh-* | head -1 | xargs -I% find % -name "agent*" -user $USER)
+end
+
+alias ssa='ssh-add'
+alias ssk='ssh-keygen'
+alias sss='ssh-agent-sock-file'
+
 alias ytl='yt-dlp -qF --list-formats' # <url>
 alias ytd='yt-dlp -f' # <format id: 251+271> <url>
 
+alias awsp='export AWS_PROFILE="$(command -v aws >/dev/null && aws configure list-profiles | fzf)"'
+alias awsl='awsp && aws sso login --no-browser'
 alias gcp='gcloud'
 alias gcpi='gcp init --no-browser --console-only --skip-diagnostics'
-alias gcpl="gcloud auth application-default login --no-launch-browser" # login
+alias gcpl="gcp auth application-default login --no-launch-browser" # login
