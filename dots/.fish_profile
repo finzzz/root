@@ -39,30 +39,29 @@ alias la='exa -a --color=always --group-directories-first --icons'  # all files 
 alias ll='exa -l --color=always --group-directories-first --icons'  # long format
 alias lt='exa -aT --color=always --group-directories-first --icons' # tree listing
 
-alias git-default-branch="gb -a | grep remotes/origin/HEAD | cut -d ' ' -f5"
-alias git-pick-unstaged="gs -s -uno | tail -n +2 | cut -c4- | fzf --preview='gd -- {}'"
-
 alias ga='git add'
-alias gaf='git-pick-unstaged | xargs git add'
+alias gaf='gsus | xargs git add'
 
 alias gb='git branch'
+alias gbdf="gb -a | grep remotes/origin/HEAD | cut -d ' ' -f5"
 
 alias gca='git commit --amend'
 alias gcm='git commit -m '
 
 alias gco='git checkout'
-alias gcor='git-pick-unstaged | xargs git checkout --' # discard changes made to an unstaged file
+alias gcor='gsus | xargs git checkout --' # discard changes made to an unstaged file
 alias gcot='gtl | xargs git checkout' # checkout tag
 
 alias gd='git diff --color=always'
 alias gl='git log --graph --decorate --oneline --color=always | fzf --ansi --preview="gd {2}" | cut -d" " -f2'
 alias glo='git log --graph --abbrev-commit --decorate --date=relative --format=format:"%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)" --all'
 alias gs='git status -sb'
-alias gsu='git ls-files --others --exclude-standard'
+alias gsut='git ls-files --others --exclude-standard | fzf --preview="cat {}"'
+alias gsus="gs -s -uno | tail -n +2 | cut -c4- | fzf --preview='gd -- {}'"
 
 alias gf='git fetch'
 alias gp='git push -u origin HEAD'
-alias gup="gf && git-default-branch | xargs git rebase"
+alias gup="gf && gbdf | xargs git rebase"
 
 alias grb='git rebase'
 alias grba='grb --abort'
