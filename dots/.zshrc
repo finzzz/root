@@ -53,6 +53,7 @@ alias tf="tofu"
 alias tfe="tofuenv"
 alias k="kubectl"
 alias kc="kubecm"
+alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 
 # somehow tmux doesn't recognize HOME END key
 bindkey "^[OH" beginning-of-line
