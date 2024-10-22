@@ -1,5 +1,6 @@
 export PATH="/home/f/.local/bin:$PATH"
 export PATH="/home/linuxbrew/.linuxbrew/opt/rustup/bin:$PATH"
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="af-magic"
@@ -50,7 +51,12 @@ alias gp="git push"
 alias gw="git worktree"
 alias tf="tofu"
 alias tfe="tofuenv"
+alias k="kubectl"
+alias kc="kubecm"
 
 # somehow tmux doesn't recognize HOME END key
 bindkey "^[OH" beginning-of-line
 bindkey "^[OF" end-of-line
+
+[ ! -f "$HOME/user.zshrc" ] && touch $HOME/user.zshrc
+source $HOME/user.zshrc
