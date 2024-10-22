@@ -1,2 +1,0 @@
-- clone astronvim `git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim`
-- put this folder like so: ~/.config/nvim/lua/user
