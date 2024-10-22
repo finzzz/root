@@ -1,6 +1,8 @@
 ## finzzz's dotfiles
 
 ```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
 brew bundle install --file=Brewfile
 mkdir -p $HOME/.config/nvim
 

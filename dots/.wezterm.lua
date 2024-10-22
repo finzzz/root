@@ -176,6 +176,7 @@ config.font_size = 14
 config.use_fancy_tab_bar = false
 config.tab_max_width = 18
 config.default_cursor_style = 'BlinkingBar'
+config.enable_scroll_bar = true
 config.keys = {
   {
     key = 'E',
