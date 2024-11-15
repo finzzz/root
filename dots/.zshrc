@@ -1,5 +1,7 @@
 export PATH="/home/f/.local/bin:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew/opt/rustup/bin:$PATH"
+export PATH="/home/linuxbrew/.linuxbrew$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/rustup/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -48,7 +50,6 @@ alias grb="git rebase"
 alias grep='grep --color=auto'
 alias gs="git status -sb"
 alias gst="git stash"
-alias gup="git pull"
 alias gw="git worktree"
 alias ip="ip -color"
 alias k="kubectl"
@@ -64,6 +65,7 @@ alias tf="tofu"
 alias tfe="tofuenv"
 alias top='btop'
 alias vi="nvim"
+alias v="vultr"
 alias watch="watch "
 alias wget='wget -c'
 
@@ -95,4 +97,13 @@ wta() {
   fi
   echo "gitdir: "$(realpath -s --relative-to=$DIRNAME $(rg -o '/.*' $DIRNAME/.git)) > $DIRNAME/.git
   cd $DIRNAME
+}
+
+gup() {
+  INITBRANCH=$(git config --get init.defaultBranch)
+  gf && grb "origin/$INITBRANCH"
+}
+
+gcob() {
+  gco -b "$1-$(date +%s)"
 }

@@ -240,6 +240,7 @@ require('lazy').setup(
     --------------------
     --------------------
     -- syntax highlighter
+    -- { import = "lazyvim.plugins.extras.lang.typescript" },
     {
       'nvim-treesitter/nvim-treesitter',
       commit = "18cf02f5efe677d992fe7f96f395ef40a2f329d2",
@@ -249,11 +250,13 @@ require('lazy').setup(
           highlight = { enable = true },
           indent = { enable = true },
           ensure_installed = {
+            "go",
             "lua",
             "markdown",
-            "go",
             "python",
             "rust",
+            "svelte",
+            "typescript"
           },
         }
         require("nvim-treesitter.install").prefer_git = true
@@ -296,6 +299,10 @@ require('lazy').setup(
 
         local handlers = {
           function(server)
+            -- https://github.com/neovim/nvim-lspconfig/pull/3232
+            if server == "tsserver" then
+              server = "ts_ls"
+            end
             require('lspconfig')[server].setup{ capabilities = capabilities }
           end
         }
@@ -303,10 +310,13 @@ require('lazy').setup(
         require("mason").setup()
         require("mason-lspconfig").setup{
           ensure_installed = {
+            "gopls",
             "lua_ls",
             "pyright",
             "rust_analyzer",
-            "gopls"
+            "svelte",
+            "terraformls",
+            "tsserver"
           },
           handlers = handlers,
         }

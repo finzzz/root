@@ -8,7 +8,7 @@ mkdir -p $HOME/.config/nvim
 
 ln -s $(readlink -f .gitconfig) $HOME/
 ln -s $(readlink -f .tmux.conf) $HOME/
-ln -s $(readlink -f starship.toml) $HOME/
+ln -s $(readlink -f .config/starship.toml) $HOME/.config/
 ln -s $(readlink -f .config/nvim/init.lua) $HOME/.config/nvim/
 
 # mac
