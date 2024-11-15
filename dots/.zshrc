@@ -99,6 +99,7 @@ wta() {
   cd $DIRNAME
 }
 
+unalias gup
 gup() {
   INITBRANCH=$(git config --get init.defaultBranch)
   gf && grb "origin/$INITBRANCH"
