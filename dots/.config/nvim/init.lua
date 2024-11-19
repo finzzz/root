@@ -498,6 +498,12 @@ require('lazy').setup(
     {
       'numToStr/Comment.nvim',
       tag = "v0.8.0",
+      dependencies = {
+        {
+          "JoosepAlviste/nvim-ts-context-commentstring",
+          commit = "9c74db6",
+        },
+      },
       opts = {
         mappings = {
           basic = false,
@@ -508,6 +514,15 @@ require('lazy').setup(
         { "<leader>/", "<Plug>(comment_toggle_linewise_current)", desc = "Comment lines", mode = "n" },
         { "<leader>/", "<Plug>(comment_toggle_linewise_visual)", desc = "Comment lines", mode = "x" },
       },
+      config = function()
+        require('Comment').setup {
+          pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+        }
+      end,
+    },
+    {
+      "thinca/vim-qfreplace",
+      cmd = "Qfreplace",
     },
     {
       'mzlogin/vim-markdown-toc',
@@ -557,7 +572,6 @@ require('lazy').setup(
     {
       'Wansmer/treesj',
       commit = "070e6761d0b11a55446d988a69908f7a0928dbab",
-      dependencies = { 'nvim-treesitter/nvim-treesitter' },
       config = function()
         require('treesj').setup({
           use_default_keymaps = false

@@ -108,3 +108,48 @@ gup() {
 gcob() {
   gco -b "$1-$(date +%s)"
 }
+
+inf(){
+  if [[ $1 == "login" ]]; then
+    infisical $@ \
+      --telemetry=false \
+      --method=$INFISICAL_LOGIN_METHOD
+  else
+    infisical $@ \
+      --telemetry=false \
+      --projectId=$INFISICAL_PROJECT_ID
+  fi
+}
+
+infh(){
+  echo "export INFISICAL_UNIVERSAL_AUTH_CLIENT_ID=abc
+export INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET=abc
+export INFISICAL_API_URL=https://infisical
+export INFISICAL_LOGIN_METHOD=universal-auth
+
+inft # to get session token
+inf secrets get HELLO --plain
+inf run --command \"printenv HELLO\""
+}
+
+inft(){
+  export INFISICAL_TOKEN=$(inf login --silent --plain)
+}
+
+tun(){
+  [[ $1 == "h" ]] && declare -f $0 && return
+  HOST=$(echo $1 | awk -F":" '/:[0-9]+/ && !/]/ {print $1}')
+  PORT=$(echo $1 | awk -F":" '/:[0-9]+/ && !/]/ {print $2}')
+
+  [[ $HOST == "" ]] && HOST="localhost"
+  [[ $PORT == "" ]] && PORT=$1
+
+  case $2 in
+    "locahost")
+      ssh -R 80:$HOST:$PORT localhost.run ;;
+    "serveo")
+      ssh -R 80:$HOST:$PORT serveo.net ;;
+    *)
+      ssh -p 443 -R0:$HOST:$PORT a.pinggy.io ;;
+  esac
+}
