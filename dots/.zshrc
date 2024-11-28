@@ -8,10 +8,11 @@ export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="af-magic"
 export EDITOR='nvim'
 export TF_PLUGIN_CACHE_DIR="$HOME/.tf_plugin_cache"
+export DISABLE_TELEMETRY=true
 
 # https://github.com/ohmyzsh/ohmyzsh/wiki/plugins
 plugins=(
-  argocd
+  # argocd
   aws
   bazel
   brew
@@ -35,6 +36,7 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
+command -v k0sctl 2>&1 >/dev/null && . <(k0sctl completion)
 
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias bazel="bazelisk"
@@ -53,6 +55,7 @@ alias gst="git stash"
 alias gw="git worktree"
 alias ip="ip -color"
 alias k="kubectl"
+alias k0="k0sctl"
 alias kc="kubecm"
 alias lg="lazygit"
 alias ls="eza"
@@ -151,5 +154,16 @@ tun(){
       ssh -R 80:$HOST:$PORT serveo.net ;;
     *)
       ssh -p 443 -R0:$HOST:$PORT a.pinggy.io ;;
+  esac
+}
+
+gitmux(){
+  case $1 in
+    "rename")
+      ROOT_DIR=$(basename $(git rev-parse --show-toplevel))
+      CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+      tmux rename-window "$ROOT_DIR@$CURRENT_BRANCH" ;;
+    *)
+      declare -f $0 ;;
   esac
 }
