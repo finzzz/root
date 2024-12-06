@@ -109,22 +109,22 @@ require('lazy').setup(
               use_output_as_input = "<C-n>"
             }
           },
-          openai_params = { 
-          model = "gpt-4o-mini", 
-          frequency_penalty = 0, 
-          presence_penalty = 0, 
-          max_tokens = 300, 
-          temperature = 0, 
-          top_p = 1, 
-          n = 1, 
-        }, 
-        openai_edit_params = { 
-          model = "gpt-3.5-turbo", 
-          frequency_penalty = 0, 
-          presence_penalty = 0, 
-          temperature = 0, 
-          top_p = 1, 
-          n = 1, 
+          openai_params = {
+          model = "gpt-4o-mini",
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          max_tokens = 300,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
+        },
+        openai_edit_params = {
+          model = "gpt-3.5-turbo",
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
         },
       })
       end,
@@ -300,9 +300,9 @@ require('lazy').setup(
         local handlers = {
           function(server)
             -- https://github.com/neovim/nvim-lspconfig/pull/3232
-            if server == "tsserver" then
-              server = "ts_ls"
-            end
+            -- if server == "tsserver" then
+            --   server = "ts_ls"
+            -- end
             require('lspconfig')[server].setup{ capabilities = capabilities }
           end
         }
@@ -766,7 +766,7 @@ require('lazy').setup(
         })
 
         -- https://www.reddit.com/r/neovim/comments/xy0tu1/cmdheight0_recording_macros_message/
-        lualine = require('lualine')
+        local lualine = require('lualine')
         vim.api.nvim_create_autocmd("RecordingEnter", {
           callback = function()
             lualine.refresh({
@@ -812,7 +812,7 @@ require('lazy').setup(
       "kevinhwang91/nvim-ufo",
       commit = "203c9f434feec57909ab4b1e028abeb3349b7847",
       event = "BufEnter",
-      dependencies = { 
+      dependencies = {
         { "kevinhwang91/promise-async", commit = "119e8961014c9bfaf1487bf3c2a393d254f337e2" },
         { "luukvbaal/statuscol.nvim" },
       },
@@ -1023,6 +1023,17 @@ require('lazy').setup(
         { "<leader>Td", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document diagnostics", mode = "n" },
       }
     },
+    {
+      "nvim-pack/nvim-spectre",
+      commit = "08be31c",
+      cmd = "Spectre",
+      config = function()
+        require('spectre').setup()
+      end,
+      keys = {
+        { "<leader>R", "<cmd>Spectre<cr>", desc = "Toggle spectre", mode = "n" },
+      }
+    },
     -----------
     -----------
     -- UTILS --
@@ -1054,13 +1065,22 @@ require('lazy').setup(
     },
     {
       "sindrets/diffview.nvim",
-      commit = "d38c1b5266850f77f75e006bcc26213684e1e141",
+      commit = "4516612",
       dependencies = { "nvim-lua/plenary.nvim" },
       config = function()
         local actions = require("diffview.actions")
         require('diffview').setup {
+          view = {
+            merge_tool = {
+              layout = "diff3_mixed",
+            },
+          },
           keymaps = {
-            disable_defaults = true,
+            -- disable_defaults = true,
+            file_panel = {
+              { "n", "<leader>r", "<cmd>DiffviewRefresh<cr>", { desc = "Rebase" } },
+              { "n", "<leader>rc", "<Cmd>Git rebase --continue<CR>", { desc = "Continue" } },
+            },
             view = {
               { "n", "<leader>c",   "<cmd>DiffviewRefresh<cr>",             { desc = "Conflict" } },
               { "n", "<leader>co",  actions.conflict_choose("ours"),        { desc = "Choose OURS" } },
@@ -1079,10 +1099,10 @@ require('lazy').setup(
         }
       end,
       keys = {
-        { "<leader>D<cr>", "<cmd> DiffviewOpen<cr>",          desc = "Open DiffView" },
-        { "<leader>DH",    "<cmd> DiffviewFileHistory<cr>",   desc = "Open DiffView Branch History" },
-        { "<leader>Dc",    "<cmd> DiffviewClose<cr>",         desc = "Close DiffView" },
-        { "<leader>Dh",    "<cmd> DiffviewFileHistory %<cr>", desc = "Open DiffView File History" },
+        { "<leader>D<cr>", "<cmd>DiffviewOpen<cr>",          desc = "Open DiffView" },
+        { "<leader>DH",    "<cmd>DiffviewFileHistory<cr>",   desc = "Open DiffView Branch History" },
+        { "<leader>Dc",    "<cmd>DiffviewClose<cr>",         desc = "Close DiffView" },
+        { "<leader>Dh",    "<cmd>DiffviewFileHistory %<cr>", desc = "Open DiffView File History" },
       }
     },
     ---------------
@@ -1138,7 +1158,7 @@ require("which-key").register(
         a = { "<cmd>ChatGPTActAs<CR>", "ChatGPT act as" },
         e = { "<cmd>ChatGPTEditWithInstruction<CR>", "Edit with instruction" },
         g = { "<cmd>ChatGPTRun grammar_correction<CR>", "Grammar Correction" },
-        t = { "<cmd>ChatGPTRun translate<CR>", "Translate" },
+        T = { "<cmd>ChatGPTRun translate<CR>", "Translate" },
         k = { "<cmd>ChatGPTRun keywords<CR>", "Keywords" },
         d = { "<cmd>ChatGPTRun docstring<CR>", "Docstring" },
         t = { "<cmd>ChatGPTRun add_tests<CR>", "Add Tests" },
@@ -1161,6 +1181,7 @@ require("which-key").register(
       w = { "<cmd> silent w<cr>", "Save" },
       x = { "<cmd> silent wq<cr>", "Save & Quit" },
       q = { "<cmd> silent q<cr>", "Quit" },
+      ['-'] = { "<cmd> silent cd %:h<cr>", "Changedir" },
     }
   }
 )
@@ -1290,7 +1311,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 ---------------
 vim.api.nvim_create_user_command(
   "Gofmt",
-  function(opts)
+  function()
     vim.cmd([[cexpr system('gofmt -e -w ' . expand('%')) | e!]])
   end,
   { nargs = '?' }

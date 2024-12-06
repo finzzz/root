@@ -31,7 +31,7 @@ plugins=(
   ssh-agent
   starship
   tailscale
-  terraform
+  # terraform
   zoxide
 )
 
