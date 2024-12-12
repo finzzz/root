@@ -71,6 +71,8 @@ alias vi="nvim"
 alias v="vultr"
 alias watch="watch "
 alias wget='wget -c'
+alias ytl='yt-dlp -qF --list-formats' # <url>
+alias ytd='yt-dlp -f' # <format id: 251+271> <url>
 
 # somehow tmux doesn't recognize HOME END key
 bindkey "^[OH" beginning-of-line

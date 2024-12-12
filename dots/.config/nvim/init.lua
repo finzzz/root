@@ -316,7 +316,6 @@ require('lazy').setup(
             "rust_analyzer",
             "svelte",
             "terraformls",
-            "tsserver"
           },
           handlers = handlers,
         }

@@ -1,5 +1,6 @@
 brew "pngpaste"
 brew "tailscale"
+brew "yt-dlp"
 cask "alt-tab"
 cask "brave-browser"
 cask "burp-suite"
