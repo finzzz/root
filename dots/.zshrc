@@ -1,14 +1,21 @@
-export PATH="/home/f/.local/bin:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew$PATH"
-export PATH="/opt/homebrew/bin:$PATH"
+BREW_PATH="/opt/homebrew"
+if [[ "$(uname)" != "Darwin" ]]; then
+  BREW_PATH="/home/linuxbrew/.linuxbrew"
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$BREW_PATH/bin:$PATH"
 export PATH="/opt/rustup/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$BREW_PATH/opt/ruby/bin:$PATH"
+export PATH="$BREW_PATH/opt/cocoapods/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="af-magic"
 export EDITOR='nvim'
 export TF_PLUGIN_CACHE_DIR="$HOME/.tf_plugin_cache"
 export DISABLE_TELEMETRY=true
+export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
 
 # https://github.com/ohmyzsh/ohmyzsh/wiki/plugins
 plugins=(
@@ -40,8 +47,13 @@ command -v k0sctl 2>&1 >/dev/null && . <(k0sctl completion)
 
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias bazel="bazelisk"
+alias bzgo="bazel run @rules_go//go --"
+alias bzpnpm="bazel run @pnpm//:pnpm --"
+alias bzm="bazel mod"
 alias cd="z"
+alias code="code-server"
 alias dea="direnv allow"
+alias ft="flutter"
 alias ga="git add"
 alias gca="git commit --amend"
 alias gcm="git commit -m"
@@ -130,7 +142,6 @@ infh(){
   echo "export INFISICAL_UNIVERSAL_AUTH_CLIENT_ID=abc
 export INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET=abc
 export INFISICAL_API_URL=https://infisical
-export INFISICAL_LOGIN_METHOD=universal-auth
 
 inft # to get session token
 inf secrets get HELLO --plain
@@ -138,7 +149,10 @@ inf run --command \"printenv HELLO\""
 }
 
 inft(){
-  export INFISICAL_TOKEN=$(inf login --silent --plain)
+  export INFISICAL_TOKEN=$(infisical login --silent --plain \
+    --method=universal-auth \
+    --client-id=$INFISICAL_UNIVERSAL_AUTH_CLIENT_ID \
+    --client-secret=$INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET)
 }
 
 tun(){

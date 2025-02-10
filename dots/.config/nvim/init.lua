@@ -76,70 +76,6 @@ local lazyconfig = {
 
 require('lazy').setup(
   {
-    --------------
-    --------------
-    -- AI SETUP --
-    --------------
-    --------------
-    {
-      'Exafunction/codeium.vim',
-      commit = "9406f13cf3eaa08318b76746bd105a04506cab27",
-      cmd = { "Codeium", "CodeiumToggle" },
-      config = function()
-        vim.g.codeium_enabled = false
-        vim.g.codeium_disable_bindings = 1
-        vim.keymap.set('i', '<c-d>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-]>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-[>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-      end
-    },
-    {
-      "jackMort/ChatGPT.nvim",
-      commit = "df53728e05129278d6ea26271ec086aa013bed90",
-      event = "VeryLazy",
-      config = function()
-        require("chatgpt").setup({
-          api_key_cmd = "printenv OPENAI_API_KEY",
-          popup_input = {
-            submit = "<CR>"
-          },
-          edit_with_instructions = {
-            keymaps = {
-              use_output_as_input = "<C-n>"
-            }
-          },
-          openai_params = {
-          model = "gpt-4o-mini",
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          max_tokens = 300,
-          temperature = 0,
-          top_p = 1,
-          n = 1,
-        },
-        openai_edit_params = {
-          model = "gpt-3.5-turbo",
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          temperature = 0,
-          top_p = 1,
-          n = 1,
-        },
-      })
-      end,
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "folke/trouble.nvim",
-        "nvim-telescope/telescope.nvim"
-      }
-    },
-    --------------
-    --------------
-    -- AI SETUP --
-    --------------
-    --------------
     ------------------
     ------------------
     -- FILE MANAGER --
@@ -299,10 +235,6 @@ require('lazy').setup(
 
         local handlers = {
           function(server)
-            -- https://github.com/neovim/nvim-lspconfig/pull/3232
-            -- if server == "tsserver" then
-            --   server = "ts_ls"
-            -- end
             require('lspconfig')[server].setup{ capabilities = capabilities }
           end
         }
@@ -319,6 +251,17 @@ require('lazy').setup(
           },
           handlers = handlers,
         }
+
+        -- suppress warning: undefined global `vim`
+        require('lspconfig').lua_ls.setup({
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = {'vim'}
+              }
+            }
+          }
+        })
 
         vim.api.nvim_exec_autocmds("FileType", {}) -- https://www.reddit.com/r/neovim/comments/14cikep/on_nightly_my_lsp_is_not_starting_automatically/
       end,
@@ -339,6 +282,7 @@ require('lazy').setup(
         { "hrsh7th/cmp-cmdline", commit = "8ee981b4a91f536f52add291594e89fb6645e451" },
         { "hrsh7th/cmp-nvim-lsp", commit = "44b16d11215dce86f253ce0c30949813c0a90765" },
         { "hrsh7th/cmp-path", commit = "91ff86cd9c29299a64f968ebb45846c485725f23" },
+        { "onsails/lspkind.nvim", commit = "d79a1c3299ad0ef94e255d045bed9fa26025dab6" },
         -- Snippets
         { "L3MON4D3/LuaSnip", tag = "v2.0.0" },
         { "saadparwaiz1/cmp_luasnip", commit = "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
@@ -401,8 +345,8 @@ require('lazy').setup(
             { name = 'buffer' },
             { name = 'luasnip' },
             { name = 'nvim_lsp' },
-            { name = 'path' }
-          }
+            { name = 'path' },
+          },
         })
 
         cmp.setup.filetype('gitcommit', {
@@ -461,7 +405,7 @@ require('lazy').setup(
       lazy = false,
       config = function()
         vim.g.VM_mouse_mappings = 1
-        vim.keymap.set('n', '<C-S-LeftMouse>', '<Plug>(VM-Mouse-Cursor)')
+        vim.keymap.set('n', '<C-S-RightMouse>', '<Plug>(VM-Mouse-Cursor)')
       end
     },
     {
@@ -586,6 +530,70 @@ require('lazy').setup(
     -- FORMATTER --
     ---------------
     ---------------
+    --------------
+    --------------
+    -- AI SETUP --
+    --------------
+    --------------
+    {
+      'Exafunction/codeium.vim',
+      commit = "9406f13cf3eaa08318b76746bd105a04506cab27",
+      cmd = { "Codeium", "CodeiumToggle" },
+      config = function()
+        vim.g.codeium_enabled = false
+        vim.g.codeium_disable_bindings = 1
+        vim.keymap.set('i', '<c-d>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-]>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-[>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
+        vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
+      end
+    },
+    {
+      "jackMort/ChatGPT.nvim",
+      commit = "5b6d296eefc75331e2ff9f0adcffbd7d27862dd6",
+      event = "VeryLazy",
+      config = function()
+        require("chatgpt").setup({
+          api_key_cmd = "printenv OPENAI_API_KEY",
+          popup_input = {
+            submit = "<CR>"
+          },
+          edit_with_instructions = {
+            keymaps = {
+              use_output_as_input = "<C-n>"
+            }
+          },
+          openai_params = {
+          model = "gpt-o1-mini",
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          max_tokens = 300,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
+        },
+        openai_edit_params = {
+          model = "gpt-o1-mini",
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
+        },
+      })
+      end,
+      dependencies = {
+        "MunifTanjim/nui.nvim",
+        "nvim-lua/plenary.nvim",
+        "folke/trouble.nvim",
+        "nvim-telescope/telescope.nvim"
+      }
+    },
+    --------------
+    --------------
+    -- AI SETUP --
+    --------------
+    --------------
     ------------------
     ------------------
     -- COLOR SCHEME --
@@ -1103,6 +1111,16 @@ require('lazy').setup(
         { "<leader>Dc",    "<cmd>DiffviewClose<cr>",         desc = "Close DiffView" },
         { "<leader>Dh",    "<cmd>DiffviewFileHistory %<cr>", desc = "Open DiffView File History" },
       }
+    },
+    {
+      "akinsho/git-conflict.nvim",
+      version = "v2.1.0",
+      lazy = false,
+      config = function()
+        vim.api.nvim_set_hl(0, 'DiffText', { fg = "#ffffff", bg = "#1d3b40" })
+        vim.api.nvim_set_hl(0, 'DiffAdd', { fg = "#ffffff", bg = "#1d3450" })
+        require("git-conflict").setup{}
+      end
     },
     ---------------
     ---------------

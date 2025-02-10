@@ -1,3 +1,4 @@
+brew "autossh"
 brew "btop"
 brew "eza"
 brew "fd"

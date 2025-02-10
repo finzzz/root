@@ -6,6 +6,7 @@ tap "oven-sh/bun"
 tap "k0sproject/tap"
 tap "finzzz/brew"
 
+brew "docker-buildx"
 brew "argocd"
 brew "awscli"
 brew "bazelisk"
@@ -32,3 +33,5 @@ brew "k0sproject/tap/k0sctl"
 brew "finzzz/brew/oapi-codegen"
 
 cask "session-manager-plugin"
+cask "android-studio"
+cask "flutter"
