@@ -9,6 +9,8 @@ export PATH="/opt/rustup/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 export PATH="$BREW_PATH/opt/ruby/bin:$PATH"
 export PATH="$BREW_PATH/opt/cocoapods/bin:$PATH"
+export PATH="$BREW_PATH/opt/ansible@10/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
 
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_THEME="af-magic"
@@ -21,7 +23,7 @@ export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave B
 plugins=(
   # argocd
   aws
-  bazel
+  # bazel
   brew
   direnv
   docker
@@ -44,6 +46,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 command -v k0sctl 2>&1 >/dev/null && . <(k0sctl completion)
+command -v wmill 2>&1 >/dev/null && . <(wmill completions zsh)
+command -v atuin 2>&1 >/dev/null && . <(atuin init zsh --disable-up-arrow)
 
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias bazel="bazelisk"
@@ -122,39 +126,6 @@ gup() {
   gf && grb "origin/$INITBRANCH"
 }
 
-gcob() {
-  gco -b "$1-$(date +%s)"
-}
-
-inf(){
-  if [[ $1 == "login" ]]; then
-    infisical $@ \
-      --telemetry=false \
-      --method=$INFISICAL_LOGIN_METHOD
-  else
-    infisical $@ \
-      --telemetry=false \
-      --projectId=$INFISICAL_PROJECT_ID
-  fi
-}
-
-infh(){
-  echo "export INFISICAL_UNIVERSAL_AUTH_CLIENT_ID=abc
-export INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET=abc
-export INFISICAL_API_URL=https://infisical
-
-inft # to get session token
-inf secrets get HELLO --plain
-inf run --command \"printenv HELLO\""
-}
-
-inft(){
-  export INFISICAL_TOKEN=$(infisical login --silent --plain \
-    --method=universal-auth \
-    --client-id=$INFISICAL_UNIVERSAL_AUTH_CLIENT_ID \
-    --client-secret=$INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET)
-}
-
 tun(){
   [[ $1 == "h" ]] && declare -f $0 && return
   HOST=$(echo $1 | awk -F":" '/:[0-9]+/ && !/]/ {print $1}')
@@ -182,4 +153,32 @@ gitmux(){
     *)
       declare -f $0 ;;
   esac
+}
+
+dockb(){
+  CONFIG="Dockerconfig.yaml"
+  if [[ ! -f $CONFIG ]]; then
+    echo "Dockertag file not found"
+    return
+  fi
+
+  if [[ $(command -v yq >/dev/null) ]]; then
+    echo "yq is required"
+    return
+  fi
+
+  TAG="$(yq .tag $CONFIG)"
+  PLATFORMS="$(yq '.platforms|join(",")' $CONFIG)"
+  IS_PUSH=$(yq '.push == true' $CONFIG)
+
+  PUSH=""
+  if [[ $IS_PUSH == "true" ]]; then
+    PUSH="--push"
+  fi
+
+  docker buildx build --platform "$PLATFORMS" -t "$TAG" $PUSH .
+}
+
+dockprune(){
+  docker rm $(docker ps -a -f status=exited -f status=created -q)
 }
