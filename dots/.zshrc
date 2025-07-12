@@ -25,7 +25,7 @@ plugins=(
   aws
   # bazel
   brew
-  direnv
+  # direnv
   docker
   eza
   fzf
@@ -48,6 +48,10 @@ source $ZSH/oh-my-zsh.sh
 command -v k0sctl 2>&1 >/dev/null && . <(k0sctl completion)
 command -v wmill 2>&1 >/dev/null && . <(wmill completions zsh)
 command -v atuin 2>&1 >/dev/null && . <(atuin init zsh --disable-up-arrow)
+command -v vcluster 2>&1 >/dev/null && . <(vcluster completion zsh)
+command -v talosctl 2>&1 >/dev/null && . <(talosctl completion zsh)
+command -v gh 2>&1 >/dev/null && . <(gh completion -s zsh)
+command -v kubecm 2>&1 >/dev/null && . <(kubecm c zsh)
 
 alias awsp='export AWS_PROFILE=$(sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config | fzf)'
 alias bazel="bazelisk"
