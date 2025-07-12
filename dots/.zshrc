@@ -25,7 +25,7 @@ plugins=(
   aws
   # bazel
   brew
-  # direnv
+  direnv
   docker
   eza
   fzf
