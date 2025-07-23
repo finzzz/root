@@ -23,12 +23,12 @@ vim.opt.tabstop        = 2             -- number of space in a tab
 vim.opt.undofile       = true          -- enable undo after close
 vim.opt.wrap           = true          -- wrapping of lines longer than the width of window
 vim.opt.listchars      = {             -- whitespace chars
-   eol        = "$",
-   extends    = "»",
-   nbsp       = "␣",
-   precedes   = "«",
-   tab        = "│→",
-   trail      = "·",
+  eol        = "$",
+  extends    = "»",
+  nbsp       = "␣",
+  precedes   = "«",
+  tab        = "│→",
+  trail      = "·",
 }
 
 vim.cmd("set splitbelow") -- default split window below
@@ -376,19 +376,6 @@ require('lazy').setup(
         })
       end,
     },
-    -- {
-    --   'anasinnyk/nvim-k8s-crd',
-    --   event = { 'BufEnter *.yaml' },
-    --   dependencies = { 'neovim/nvim-lspconfig' },
-    --   config = function()
-    --     require('k8s-crd').setup({
-    --       cache_dir = ".k8s-schemas",
-    --       k8s = {
-    --         file_mask = "*.yaml",
-    --       },
-    --     })
-    --   end
-    -- },
     --------------------
     --------------------
     -- LANGUAGE SETUP --
@@ -535,60 +522,8 @@ require('lazy').setup(
     -- AI SETUP --
     --------------
     --------------
-    {
-      'Exafunction/codeium.vim',
-      commit = "9406f13cf3eaa08318b76746bd105a04506cab27",
-      cmd = { "Codeium", "CodeiumToggle" },
-      config = function()
-        vim.g.codeium_enabled = false
-        vim.g.codeium_disable_bindings = 1
-        vim.keymap.set('i', '<c-d>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-]>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-[>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true, silent = true })
-        vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true, silent = true })
-      end
-    },
-    {
-      "jackMort/ChatGPT.nvim",
-      commit = "5b6d296eefc75331e2ff9f0adcffbd7d27862dd6",
-      event = "VeryLazy",
-      config = function()
-        require("chatgpt").setup({
-          api_key_cmd = "printenv OPENAI_API_KEY",
-          popup_input = {
-            submit = "<CR>"
-          },
-          edit_with_instructions = {
-            keymaps = {
-              use_output_as_input = "<C-n>"
-            }
-          },
-          openai_params = {
-          model = "gpt-o1-mini",
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          max_tokens = 300,
-          temperature = 0,
-          top_p = 1,
-          n = 1,
-        },
-        openai_edit_params = {
-          model = "gpt-o1-mini",
-          frequency_penalty = 0,
-          presence_penalty = 0,
-          temperature = 0,
-          top_p = 1,
-          n = 1,
-        },
-      })
-      end,
-      dependencies = {
-        "MunifTanjim/nui.nvim",
-        "nvim-lua/plenary.nvim",
-        "folke/trouble.nvim",
-        "nvim-telescope/telescope.nvim"
-      }
-    },
+    -- {
+    -- },
     --------------
     --------------
     -- AI SETUP --
@@ -599,34 +534,6 @@ require('lazy').setup(
     -- COLOR SCHEME --
     ------------------
     ------------------
-    -- {
-    --   "folke/tokyonight.nvim",
-    --   tag = "v2.9.0",
-    --   lazy = false,
-    --   priority = 1000,
-    --   config = function()
-    --     require("tokyonight").setup({
-    --       style = "night",
-    --       transparent = false,
-    --       terminal_colors = true,
-    --       styles = {
-    --         comments = "italic",
-    --         sidebars = "dark",
-    --         floats = "dark",
-    --       },
-    --       sidebars = { "qf", "help" },
-    --       day_brightness = 0.3,
-    --       hide_inactive_statusline = false,
-    --       dim_inactive = false,
-    --       lualine_bold = false,
-    --       on_highlights = function(hl, c)
-    --         hl.WinSeparator = {
-    --           fg = c.dark3,
-    --         }
-    --       end
-    --     })
-    --   end
-    -- },
     {
       "EdenEast/nightfox.nvim",
       tag = "v3.9.3",
