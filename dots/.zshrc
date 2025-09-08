@@ -116,7 +116,7 @@ gswitch() {
 
   TOP=$(git rev-parse --show-toplevel)
 
-  MAIN_OR_MASTER=$(git branch | grep -o -m1 "\b\(master\|main\)\b")
+  MAIN_OR_MASTER=$(git show-ref --verify --quiet refs/heads/master && echo master || echo main)
   REF="${2:-$MAIN_OR_MASTER}"
 
   git worktree list --porcelain | grep -q refs/heads/$INPUT_BRANCH \
