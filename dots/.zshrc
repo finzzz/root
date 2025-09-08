@@ -136,10 +136,9 @@ gswitch() {
 
 gitmux(){
   case $1 in
-    "rename")
-      ROOT_DIR=$(basename $(git rev-parse --show-toplevel))
+    "r")
       CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-      tmux rename-window "$ROOT_DIR@$CURRENT_BRANCH" ;;
+      tmux rename-window "$CURRENT_BRANCH" ;;
     *)
       declare -f $0 ;;
   esac
