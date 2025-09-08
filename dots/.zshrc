@@ -18,6 +18,7 @@ export ZSH_THEME="af-magic"
 export EDITOR='nvim'
 export TF_PLUGIN_CACHE_DIR="$HOME/.tf_plugin_cache"
 export DISABLE_TELEMETRY=true
+export LG_CONFIG_FILE="$HOME/lazygit.yaml"
 
 # https://github.com/ohmyzsh/ohmyzsh/wiki/plugins
 plugins=(
@@ -88,6 +89,48 @@ tun(){
     *)
       ssh -p 443 -R0:$HOST:$PORT a.pinggy.io ;;
   esac
+}
+
+glone() {
+  LINK="$1"
+  NAME="${2:-$(basename $LINK)}"
+  git clone --bare $LINK $NAME
+  cd $NAME
+
+  MAIN_OR_MASTER=$(git branch | grep -o -m1 "\b\(master\|main\)\b")
+  git worktree add ws/$MAIN_OR_MASTER
+  cd ws/$MAIN_OR_MASTER
+}
+
+gswitch() {
+  [[ $(git rev-parse --is-inside-work-tree) == "false" ]] && return
+
+  INPUT_BRANCH="$1"
+  WORKTREE_NAME=$INPUT_BRANCH
+
+  [[ $INPUT_BRANCH =~ "/" ]] && WORKTREE_NAME="${WORKTREE_NAME//\//-}"
+
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  [[ "$INPUT_BRANCH" == "$CURRENT_BRANCH" ]] && return # no need to switch
+
+  TOP=$(git rev-parse --show-toplevel)
+
+  MAIN_OR_MASTER=$(git branch | grep -o -m1 "\b\(master\|main\)\b")
+  REF="${2:-$MAIN_OR_MASTER}"
+
+  git worktree list --porcelain | grep -q refs/heads/$INPUT_BRANCH \
+    || git worktree add -b $INPUT_BRANCH "$TOP/../$WORKTREE_NAME" $REF 2>/dev/null \
+    || git worktree add "$TOP/../$WORKTREE_NAME" $INPUT_BRANCH 2>/dev/null
+
+  cd "$TOP/../$WORKTREE_NAME"
+
+  # handle conflicts
+  # workspace will have same WORKTREE_NAME for branch a/b and a-b
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  if [[ "$INPUT_BRANCH" != "$CURRENT_BRANCH" ]]; then
+    git checkout -b "$INPUT_BRANCH" 2>/dev/null \
+    || git checkout "$INPUT_BRANCH"
+  fi
 }
 
 gitmux(){

@@ -1,0 +1,43 @@
+os:
+  shellFunctionsFile: ~/.zshrc
+# https://github.com/jesseduffield/lazygit/blob/master/docs/Custom_Command_Keybindings.md
+customCommands:
+  - key: U
+    description: "Update with upstream"
+    command: "git fetch && git rebase {{.Form.Remote}}/{{.Form.Branch}}"
+    context: global
+    prompts:
+    - type: input
+      title: Remote
+      key: Remote
+      initialValue: "{{.SelectedRemote.Name}}"
+      suggestions:
+        preset: remotes
+    - type: menu
+      title: Branch
+      key: Branch
+      options:
+        - value: |-
+            {{runCommand "zsh -c 'git worktree list --porcelain | grep -oq refs/heads/master$ && echo master || echo main'"}}
+        - value: "{{.SelectedLocalBranch.Name}}"
+    - type: confirm
+      title: "Proceed ?"
+      body: "git fetch && git rebase {{.Form.Remote}}/{{.Form.Branch}}"
+  - key: W
+    description: "Switch worktree"
+    command: "gswitch {{.Form.Branch}} {{.Form.Ref}}"
+    context: global
+    prompts:
+    - type: input
+      title: Branch
+      key: Branch
+      suggestions:
+        command: "git branch --format='%(refname:short)'"
+    - type: input
+      title: Ref
+      key: Ref
+      suggestions:
+        command: "git branch --format='%(refname:short)'"
+    - type: confirm
+      title: "Proceed ?"
+      body: "gswitch {{.Form.Branch}} {{.Form.Ref}}"
