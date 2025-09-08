@@ -96,6 +96,7 @@ glone() {
   NAME="${2:-$(basename $LINK)}"
   git clone --bare $LINK $NAME
   cd $NAME
+  git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 
   MAIN_OR_MASTER=$(git branch | grep -o -m1 "\b\(master\|main\)\b")
   git worktree add ws/$MAIN_OR_MASTER
